@@ -3,16 +3,27 @@ import React, { Component } from 'react'
 class App extends Component {
   constructor(props){
     super(props)
-    this.state={
-      repos:[],
-      avatar_url: 'https://thumbsplus.tutsplus.com/uploads/users/1885/profiles/20400/profileImage/Tn2cD3Wq_400x400.jpg?height=76&width=76',
-      username: 'MyGitHubProfile',
-      html_url: 'https://github.com/',
-      followers: 0,
-      following: 0,
+    this.state={      
+      username: 'jair8choa',
+      repos:[]
     }    
   } 
-
+  componentWillMount(){
+    fetch(`https://api.github.com/users/jair8choa`)
+        .then(res=>res.json())
+        .then(json=>{
+          this.setState(json)          
+        })
+    fetch(`https://api.github.com/users/${this.state.username}/repos`)
+        .then(res2=>res2.json())
+        .then(json2=>{
+          if (json2.message === "Not Found") {
+            this.setState({repos: []})
+          }else{
+            this.setState({repos: json2})
+          }    
+        })
+  }
   render() {
     const repos = this.state.repos.map((m,k)=>{
         let urlRepo = `https://github.com/${this.state.username}/${m.name}`
@@ -59,14 +70,13 @@ class App extends Component {
   onUserNameChange = e =>{
     if (e.target.value === "") {
       this.setState({
-        username: 'MyGitHubProfile'
+        username: this.state.login
       })
     }else{
       this.setState({
         username: e.target.value
       })
-    }
-    
+    }    
   }
 
   searchUser = e =>{  
