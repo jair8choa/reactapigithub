@@ -47,6 +47,7 @@ class App extends Component {
           <h4>{this.state.name}</h4>
           <p>{this.state.bio}</p>
           <p>Followers {this.state.followers} - Following {this.state.following}</p>
+          <p className="font-weight-bold">{this.state.location}</p>
         </div>
         <div className="col-sm-7">
           <nav className="nav mb-4">
