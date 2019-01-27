@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Repo from './components/Repo'
 
 class App extends Component {
   constructor(){
@@ -15,14 +16,7 @@ class App extends Component {
     const repos = this.state.repos.map((repo,key)=>{
         let urlRepo = `https://github.com/${this.state.username}/${repo.name}`
       return(
-        <div className="card mb-2" key={key}>
-          <div className="card-body">
-            <h5 className="card-title">{repo.name}</h5>
-            <h6 className="card-subtitle mb-2 text-muted font-italic">{repo.language}</h6>
-            <p className="card-text">{repo.description}</p>
-            <a href={urlRepo} className="card-link">Repository</a>
-          </div>
-        </div>
+        <Repo name={repo.name} language={repo.language} description={repo.description} urlRepo={urlRepo} key={key}/>
       )
     })
 
