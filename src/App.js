@@ -1,38 +1,25 @@
 import React, { Component } from 'react'
 
 class App extends Component {
-  constructor(props){
-    super(props)
+  constructor(){
+    super()
     this.state={      
       username: 'jair8choa',
       repos:[]
     }    
+    this.FetchReq = this.FetchReq.bind(this)
+    this.FetchReq(this.state.username)
   } 
-  componentWillMount(){
-    fetch(`https://api.github.com/users/jair8choa`)
-        .then(res=>res.json())
-        .then(json=>{
-          this.setState(json)          
-        })
-    fetch(`https://api.github.com/users/${this.state.username}/repos`)
-        .then(res2=>res2.json())
-        .then(json2=>{
-          if (json2.message === "Not Found") {
-            this.setState({repos: []})
-          }else{
-            this.setState({repos: json2})
-          }    
-        })
-  }
+
   render() {
-    const repos = this.state.repos.map((m,k)=>{
-        let urlRepo = `https://github.com/${this.state.username}/${m.name}`
+    const repos = this.state.repos.map((repo,key)=>{
+        let urlRepo = `https://github.com/${this.state.username}/${repo.name}`
       return(
-        <div className="card mb-2">
+        <div className="card mb-2" key={key}>
           <div className="card-body">
-            <h5 className="card-title">{m.name}</h5>
-            <h6 className="card-subtitle mb-2 text-muted font-italic">{m.language}</h6>
-            <p className="card-text">{m.description}</p>
+            <h5 className="card-title">{repo.name}</h5>
+            <h6 className="card-subtitle mb-2 text-muted font-italic">{repo.language}</h6>
+            <p className="card-text">{repo.description}</p>
             <a href={urlRepo} className="card-link">Repository</a>
           </div>
         </div>
@@ -57,7 +44,7 @@ class App extends Component {
             </form>
           </nav>
           <div className="container">
-            <p>Repos: <a className="font-weight-bold">{this.state.public_repos}</a></p>
+            <p>Repos: <span className="font-weight-bold">{this.state.public_repos}</span></p>
             { repos }
           </div>
           {/* <div class="alert alert-danger" role="alert">
@@ -82,12 +69,16 @@ class App extends Component {
 
   searchUser = e =>{  
     e.preventDefault()
-    fetch(`https://api.github.com/users/${this.state.username}`)
+    this.FetchReq(this.state.username)
+  }
+
+  FetchReq(username){
+    fetch(`https://api.github.com/users/${username}`)
         .then(res=>res.json())
         .then(json=>{
           this.setState(json)          
         })
-    fetch(`https://api.github.com/users/${this.state.username}/repos`)
+    fetch(`https://api.github.com/users/${username}/repos`)
         .then(res2=>res2.json())
         .then(json2=>{
           if (json2.message === "Not Found") {
@@ -95,7 +86,7 @@ class App extends Component {
           }else{
             this.setState({repos: json2})
           }    
-        })       
+        })
   }
 }
 export default App
